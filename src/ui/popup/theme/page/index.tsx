@@ -2,6 +2,7 @@ import {m} from 'malevic';
 
 import {DEFAULT_SETTINGS, DEFAULT_THEME, DEFAULT_COLORS} from '../../../../defaults';
 import type {Theme, ViewProps} from '../../../../definitions';
+import {getPaletteThemeValues} from '../../../../generators/palettes';
 import {ThemeEngine} from '../../../../generators/theme-engines';
 import type {ParsedColorSchemeConfig} from '../../../../utils/colorscheme-parser';
 import {isURLEnabled, isURLInList} from '../../../../utils/url';
@@ -15,6 +16,7 @@ import {
     Grayscale,
     ImmediateModify,
     Mode,
+    PaletteDropDown,
     ResetButton,
     Scheme,
     Scrollbar,
@@ -85,25 +87,33 @@ function ColorsGroup({theme, change, colorSchemes}: ColorsGroupProps) {
             return {id: value, content: value};
         });
 
+    // Palettes only apply to the dark scheme. Any manual color choice in
+    // dark mode replaces the active palette, so the pickers stay accurate.
+    const paletteReset: Partial<Theme> = isDarkScheme ? {palette: ''} : {};
+
     function onColorSchemeChange(newColor: string) {
-        change({[csProp]: newColor});
+        change({[csProp]: newColor, ...paletteReset});
         change({[bgProp]: currentSchemeColors[newColor].backgroundColor});
         change({[fgProp]: currentSchemeColors[newColor].textColor});
+    }
+
+    function onPaletteChange(id: string) {
+        change(getPaletteThemeValues(id));
     }
 
     return (
         <Array>
             <BackgroundColor
                 value={theme[bgProp] === 'auto' ? defaultSchemeColors.background : theme[bgProp]}
-                onChange={(v) => change({[bgProp]: v, ...defaultMatrixValues, [csProp]: 'Default'})}
+                onChange={(v) => change({[bgProp]: v, ...defaultMatrixValues, [csProp]: 'Default', ...paletteReset})}
                 canReset={theme[bgProp] !== defaultSchemeColors.background}
-                onReset={() => change({[bgProp]: DEFAULT_SETTINGS.theme[bgProp], [csProp]: 'Default'})}
+                onReset={() => change({[bgProp]: DEFAULT_SETTINGS.theme[bgProp], [csProp]: 'Default', ...paletteReset})}
             />
             <TextColor
                 value={theme[fgProp] === 'auto' ? defaultSchemeColors.text : theme[fgProp]}
-                onChange={(v) => change({[fgProp]: v, ...defaultMatrixValues, [csProp]: 'Default'})}
+                onChange={(v) => change({[fgProp]: v, ...defaultMatrixValues, [csProp]: 'Default', ...paletteReset})}
                 canReset={theme[fgProp] !== defaultSchemeColors.text}
-                onReset={() => change({[fgProp]: DEFAULT_SETTINGS.theme[fgProp], [csProp]: 'Default'})}
+                onReset={() => change({[fgProp]: DEFAULT_SETTINGS.theme[fgProp], [csProp]: 'Default', ...paletteReset})}
             />
             <Scrollbar
                 value={theme.scrollbarColor}
@@ -120,6 +130,12 @@ function ColorsGroup({theme, change, colorSchemes}: ColorsGroupProps) {
                 values={sortedColorSchemeValues}
                 onChange={(v) => onColorSchemeChange(v)}
             />
+            {isDarkScheme ? (
+                <PaletteDropDown
+                    selected={theme.palette}
+                    onChange={onPaletteChange}
+                />
+            ) : null}
         </Array>
     );
 }

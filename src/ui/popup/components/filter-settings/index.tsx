@@ -6,6 +6,7 @@ import {isURLInList} from '../../../../utils/url';
 import {UpDown} from '../../../controls';
 import CustomSettingsToggle from '../custom-settings-toggle';
 
+import ColorSettings from './color-settings';
 import ModeToggle from './mode-toggle';
 
 export default function FilterSettings({data, actions}: ExtWrapper, ...children: Malevic.Child[]) {
@@ -76,6 +77,13 @@ export default function FilterSettings({data, actions}: ExtWrapper, ...children:
             {contrast}
             {sepia}
             {grayscale}
+            {theme.mode === 1 ? (
+                <ColorSettings
+                    theme={theme}
+                    colorSchemes={data.colorScheme}
+                    onChange={setConfig}
+                />
+            ) : null}
             <CustomSettingsToggle data={data} actions={actions} />
             <div class="filter-settings__content">
                 {...children}

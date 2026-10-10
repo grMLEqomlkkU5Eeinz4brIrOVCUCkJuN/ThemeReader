@@ -7,6 +7,7 @@ import FontPicker from './font-picker';
 import Grayscale from './grayscale';
 import ImmediateModify from './immediate-modify';
 import Mode from './mode';
+import PaletteDropDown from './palette';
 import ResetButton from './reset-button';
 import Scheme from './scheme';
 import Scrollbar from './scrollbar';
@@ -27,6 +28,7 @@ export {
     Grayscale,
     ImmediateModify,
     Mode,
+    PaletteDropDown,
     ResetButton,
     Scheme,
     Scrollbar,

@@ -72,6 +72,8 @@ export interface Theme {
     styleSystemControls: boolean;
     lightColorScheme: string;
     darkColorScheme: string;
+    // Id of a semantic palette from generators/palettes.ts, or '' for none.
+    palette: string;
     immediateModify: boolean;
 }
 

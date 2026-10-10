@@ -68,3 +68,26 @@
 .icon--light-mode {
     background-image: url(../assets/images/mode-light-32.svg);
 }
+
+.color-settings {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+
+    &__item {
+        display: flex;
+        flex: auto;
+        flex-direction: column;
+        min-width: 0;
+
+        + .color-settings__item {
+            margin-left: @indent-small;
+        }
+    }
+
+    &__label {
+        font-size: @size-text-small;
+        line-height: @size-text-small-height;
+        text-align: center;
+    }
+}

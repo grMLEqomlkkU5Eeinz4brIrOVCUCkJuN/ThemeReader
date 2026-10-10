@@ -41,6 +41,7 @@ test('Settings Validation', () => {
         styleSystemControls: null as boolean | null,
         lightColorScheme: '',
         darkColorScheme: false,
+        palette: 'missing-palette',
         immediateModify: 1,
     };
     themeValidation = validateTheme(wonkyTheme as any);
@@ -76,6 +77,7 @@ test('Settings Validation', () => {
             styleSystemControls: null as boolean | null,
             lightColorScheme: '',
             darkColorScheme: false,
+            palette: 'missing-palette',
             immediateModify: 1,
         },
         presets: [
@@ -173,6 +175,7 @@ test('Settings Validation', () => {
             styleSystemControls: false,
             lightColorScheme: 'Lightness',
             darkColorScheme: 'Darkness',
+            palette: 'nord',
             immediateModify: true,
         },
         presets: [

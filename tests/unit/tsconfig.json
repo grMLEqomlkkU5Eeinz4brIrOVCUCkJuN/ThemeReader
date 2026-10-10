@@ -20,8 +20,9 @@
         "strictNullChecks": true,
         "strictPropertyInitialization": false,
         "inlineSourceMap": true,
+        "baseUrl": "../../src",
         "paths": {
-            "@plus/*": ["../../src/stubs/*"]
+            "@plus/*": ["stubs/*"]
         }
     }
 }

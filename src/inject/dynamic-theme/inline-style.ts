@@ -289,7 +289,20 @@ export function stopWatchingForInlineStyles(): void {
 const inlineStyleCache = new WeakMap<HTMLElement, string>();
 const svgInversionCache = new WeakSet<SVGSVGElement>();
 const svgAnalysisConditionCache = new WeakMap<SVGSVGElement, boolean>();
-const themeProps: Array<keyof Theme> = ['brightness', 'contrast', 'grayscale', 'sepia', 'mode'];
+// Inline styles are cached per element. Any theme field that changes their
+// result must be listed here, or a live update leaves those elements stale.
+const themeProps: Array<keyof Theme> = [
+    'brightness',
+    'contrast',
+    'grayscale',
+    'sepia',
+    'mode',
+    'palette',
+    'darkSchemeBackgroundColor',
+    'darkSchemeTextColor',
+    'lightSchemeBackgroundColor',
+    'lightSchemeTextColor',
+];
 
 function shouldAnalyzeSVGAsImage(svg: SVGSVGElement) {
     if (svgAnalysisConditionCache.has(svg)) {
@@ -362,6 +375,7 @@ function getSVGElementRoot(svgElement: SVGElement): SVGSVGElement | null {
 }
 
 const inlineStringValueCache = new Map<string, Map<string, string>>();
+let inlineStringValueThemeKey = '';
 
 const MAX_LOOP_TEARDOWNS = 10;
 const inlineStyleParents = new Map<HTMLElement, Node>();
@@ -413,6 +427,13 @@ export function overrideInlineStyle(element: HTMLElement, theme: Theme, ignoreIn
     // ProseMirror editor rebuilds entire HTML after style changes
     if (element.parentElement?.dataset.nodeViewContent) {
         return;
+    }
+
+    // Converted string values depend on the theme, so drop them when it changes.
+    const currentThemeKey = getThemeKey(theme);
+    if (currentThemeKey !== inlineStringValueThemeKey) {
+        inlineStringValueCache.clear();
+        inlineStringValueThemeKey = currentThemeKey;
     }
 
     const cacheKey = getInlineStyleCacheKey(element, theme);

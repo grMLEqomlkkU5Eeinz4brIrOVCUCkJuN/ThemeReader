@@ -9,6 +9,7 @@ const config = {
     rootDir,
     testMatch: ['<rootDir>/tests/unit/**/*.tests.ts'],
     moduleFileExtensions: ['ts', 'tsx', 'js'],
+    modulePaths: ['<rootDir>/src'],
     moduleNameMapper: {
         '@plus/(.*)': ['<rootDir>/src/stubs/$1'],
     },

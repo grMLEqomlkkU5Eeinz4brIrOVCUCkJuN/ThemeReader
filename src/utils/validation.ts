@@ -1,6 +1,8 @@
 import {DEFAULT_SETTINGS, DEFAULT_THEME} from '../defaults';
 import type {UserSettings, Theme, ThemePreset, CustomSiteConfig, TimeSettings, LocationSettings, Automation} from '../definitions';
 
+import {getThemePalette} from '../generators/palettes';
+
 import {AutomationMode} from './automation';
 
 function isBoolean(x: any): x is boolean {
@@ -218,6 +220,7 @@ export function validateTheme(theme: Partial<Theme> | null | undefined): ThemeVa
     validateProperty(theme, 'styleSystemControls', isBoolean, DEFAULT_THEME);
     validateProperty(theme, 'lightColorScheme', isNonEmptyString, DEFAULT_THEME);
     validateProperty(theme, 'darkColorScheme', isNonEmptyString, DEFAULT_THEME);
+    validateProperty(theme, 'palette', (x: any) => x === '' || getThemePalette(x) != null, DEFAULT_THEME);
     validateProperty(theme, 'immediateModify', isBoolean, DEFAULT_THEME);
 
     return {errors, theme};

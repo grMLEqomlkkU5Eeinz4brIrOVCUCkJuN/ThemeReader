@@ -39,6 +39,7 @@ export const DEFAULT_THEME: Theme = {
     styleSystemControls: __CHROMIUM_MV3__ ? false : !isCSSColorSchemePropSupported,
     lightColorScheme: 'Default',
     darkColorScheme: 'Default',
+    palette: '',
     immediateModify: false,
 };
 
